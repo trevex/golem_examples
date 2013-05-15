@@ -1,8 +1,8 @@
 package main
 
 import (
-	"code.google.com/p/go.net/websocket"
 	"flag"
+	"fmt"
 	"github.com/trevex/golem"
 	"log"
 	"net/http"
@@ -10,10 +10,21 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
+func chat(conn *golem.Connection, data *golem.DataType) {
+	fmt.Println(data)
+	conn.Send(data)
+}
+
 func main() {
+
 	flag.Parse()
-	go golem.StartHub()
-	http.Handle("/ws", websocket.Handler(golem.WebSocketHandler))
+
+	myrouter := golem.NewRouter()
+	myrouter.On("chat", chat)
+
+	http.Handle("/", http.FileServer(http.Dir("./public")))
+	http.Handle("/ws", myrouter.Handler())
+
 	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}

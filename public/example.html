@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>Golem Example</title>
+<script type="text/javascript">
+    var conn;
+ 
+    function send(name, data) {
+        conn.send('{"n":"'+name+'", "d":'+data+'}');
+    }
+ 
+    if (window["WebSocket"]) {
+        conn = new WebSocket("ws://127.0.0.1:8080/ws");
+        conn.onclose = function(evt) {
+            console.log("Connection closed!");
+        }
+        conn.onmessage = function(evt) {
+            console.log("Received:", evt.data);
+        }
+        conn.onopen = function(evt) {
+            send("chat", "{}");
+        }
+    } else {
+        console.log("WebSockets not supported!");
+    }
+</script>
+</head>
+<body>
+</body>
+</html>
