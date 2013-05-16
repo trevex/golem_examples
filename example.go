@@ -15,7 +15,11 @@ type ChatMessage struct {
 }
 
 func chat(conn *golem.Connection, data *ChatMessage) {
-	fmt.Println(data.Msg)
+	fmt.Println("Received:", data.Msg)
+}
+
+func raw(conn *golem.Connection, data []byte) {
+	fmt.Println("Received:", string(data))
 }
 
 func main() {
@@ -24,6 +28,7 @@ func main() {
 
 	myrouter := golem.NewRouter()
 	myrouter.On("chat", chat)
+	myrouter.On("raw", raw)
 
 	http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.HandleFunc("/ws", myrouter.Handler())

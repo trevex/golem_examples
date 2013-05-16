@@ -5,7 +5,7 @@
     var conn;
  
     function send(name, data) {
-        conn.send('{"n":"'+name+'", "d":'+data+'}');
+        conn.send(name+' '+data);
     }
  
     if (window["WebSocket"]) {
@@ -17,7 +17,8 @@
             console.log("Received:", evt.data);
         }
         conn.onopen = function(evt) {
-            send("chat", '{ "msg": "hello server" }');
+            send("chat", '{ "Msg": "hello proto" }');
+            send("raw", '{ "Msg": "hello raw" }');
         }
     } else {
         console.log("WebSockets not supported!");
