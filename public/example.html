@@ -17,7 +17,7 @@
             console.log("Received:", evt.data);
         }
         conn.onopen = function(evt) {
-            send("chat", "{}");
+            send("chat", '{ "msg": "hello server" }');
         }
     } else {
         console.log("WebSockets not supported!");

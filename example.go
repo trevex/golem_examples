@@ -10,9 +10,12 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-func chat(conn *golem.Connection, data *golem.DataType) {
-	fmt.Println(data)
-	conn.Send(data)
+type ChatMessage struct {
+	Msg string `json:"msg"`
+}
+
+func chat(conn *golem.Connection, data *ChatMessage) {
+	fmt.Println(data.Msg)
 }
 
 func main() {
