@@ -14,21 +14,31 @@ type ChatMessage struct {
 	Msg string `json:"msg"`
 }
 
-func chat(conn *golem.Connection, data *ChatMessage) {
-	fmt.Println("Received:", data.Msg)
+func json(conn *golem.Connection, data *ChatMessage) {
+	fmt.Println("JSON:  ", data.Msg)
 }
 
 func raw(conn *golem.Connection, data []byte) {
-	fmt.Println("Received:", string(data))
+	fmt.Println("Raw:   ", string(data))
+}
+
+func custom(conn *golem.Connection, data string) {
+	fmt.Println("Custom:", data)
+}
+
+func customParser(data []byte) (string, bool) {
+	return string(data), true
 }
 
 func main() {
-
 	flag.Parse()
 
+	golem.AddParser(customParser)
+
 	myrouter := golem.NewRouter()
-	myrouter.On("chat", chat)
+	myrouter.On("json", json)
 	myrouter.On("raw", raw)
+	myrouter.On("custom", custom)
 
 	http.Handle("/", http.FileServer(http.Dir("./public")))
 	http.HandleFunc("/ws", myrouter.Handler())
