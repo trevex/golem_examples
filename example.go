@@ -23,7 +23,7 @@ func main() {
 	myrouter.On("chat", chat)
 
 	http.Handle("/", http.FileServer(http.Dir("./public")))
-	http.Handle("/ws", myrouter.Handler())
+	http.HandleFunc("/ws", myrouter.Handler())
 
 	if err := http.ListenAndServe(*addr, nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
