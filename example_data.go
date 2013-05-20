@@ -57,6 +57,9 @@ func main() {
 	myrouter.On("json", json)
 	myrouter.On("raw", raw)
 	myrouter.On("custom", custom)
+	myrouter.OnClose(func(conn *golem.Connection) {
+		fmt.Println("Client disconnected!")
+	})
 
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))
