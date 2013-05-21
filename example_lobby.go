@@ -10,15 +10,27 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-var hub = golem.GetHub()
+var mylobby = golem.NewLobby()
 
-type JoinMessage struct {
-	Name string `json:"name"`
+type EmptyMessage struct{}
+
+func join(conn *golem.Connection, data *EmptyMessage) {
+	mylobby.Join <- conn
+	fmt.Println("Someone joined channel.")
 }
 
-func join(conn *golem.Connection, data *JoinMessage) {
-	hub.JoinLobby(conn, data.Name)
-	fmt.Println("Joined ", data.Name)
+func leave(conn *golem.Connection, data *EmptyMessage) {
+	mylobby.Leave <- conn
+	fmt.Println("Someone left channel.")
+}
+
+type LobbyMessage struct {
+	Msg string `json:"msg"`
+}
+
+func lobby(conn *golem.Connection, data *LobbyMessage) {
+	mylobby.Send <- []byte(data.Msg)
+	fmt.Println("\"", data.Msg, "\" sent to members of channel.")
 }
 
 func main() {
@@ -28,6 +40,8 @@ func main() {
 	myrouter := golem.NewRouter()
 	// Add the events to the router
 	myrouter.On("join", join)
+	myrouter.On("leave", leave)
+	myrouter.On("lobby", lobby)
 
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))

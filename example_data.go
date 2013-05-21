@@ -23,6 +23,7 @@ type ChatMessage struct {
 // inbuilt unmarshalling
 func json(conn *golem.Connection, data *ChatMessage) {
 	fmt.Println("JSON:  ", data.Msg)
+	conn.Send <- []byte("Json received.")
 }
 
 // If a function accepts a byte array the data is directly
@@ -30,12 +31,14 @@ func json(conn *golem.Connection, data *ChatMessage) {
 // Hence it is the fastest way.
 func raw(conn *golem.Connection, data []byte) {
 	fmt.Println("Raw:   ", string(data))
+	conn.Send <- []byte("Raw byte array received.")
 }
 
 // If a parser is known for the specific data type it is
 // automatically used.
 func custom(conn *golem.Connection, data string) {
 	fmt.Println("Custom:", data)
+	conn.Send <- []byte("Custom handler use to receive data.")
 }
 
 // Custom parsers take a byte array as argument and return
@@ -57,6 +60,8 @@ func main() {
 	myrouter.On("json", json)
 	myrouter.On("raw", raw)
 	myrouter.On("custom", custom)
+
+	//
 	myrouter.OnClose(func(conn *golem.Connection) {
 		fmt.Println("Client disconnected!")
 	})
