@@ -16,12 +16,12 @@ type EmptyMessage struct{}
 
 func join(conn *golem.Connection, data *EmptyMessage) {
 	mylobby.Join(conn)
-	fmt.Println("Someone joined channel.")
+	fmt.Println("Someone joined mylobby.")
 }
 
 func leave(conn *golem.Connection, data *EmptyMessage) {
 	mylobby.Leave(conn)
-	fmt.Println("Someone left channel.")
+	fmt.Println("Someone left mylobby.")
 }
 
 type LobbyMessage struct {
@@ -30,7 +30,7 @@ type LobbyMessage struct {
 
 func lobby(conn *golem.Connection, data *LobbyMessage) {
 	mylobby.Emit("lobbyMessage", data)
-	fmt.Println("\"" + data.Msg + "\" sent to members of channel.")
+	fmt.Println("\"" + data.Msg + "\" sent to members of mylobby.")
 }
 
 func connClose(conn *golem.Connection) {
