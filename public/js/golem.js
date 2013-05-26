@@ -60,11 +60,15 @@
                 if (this.debug) {
                     console.log("golem: Connection established!");
                 }
-                if (this.callbacks["close"]) this.callbacks["open"](evt);
+                if (this.callbacks["open"]) this.callbacks["open"](evt);
             },
             on: function(name, callback) {
                 this.callbacks[name] = callback;
+            },
+            emit: function(name, data) {
+                this.ws.send(name+" "+JSON.stringify(data));
             }
+
         }
 
         global.golem = {
@@ -75,32 +79,5 @@
 
         console.warn("golem: WebSockets not supported!");
 
-    }
-
-
-
-    var conn;
-
-
- 
-    function send(name, data) {
-        conn.send(name+' '+data);
-    }
- 
-    if (window["WebSocket"]) {
-        conn = new WebSocket("ws://127.0.0.1:8080/ws");
-        conn.onclose = function(evt) {
-            console.log("Connection closed!");
-        }
-        conn.onmessage = function(evt) {
-            console.log("Received:", evt.data);
-        }
-        conn.onopen = function(evt) {
-            send("join", '{}');
-            send("lobby", '{ "msg": "Hi members of lobby!"}');
-            send("leave", '{}');
-        }
-    } else {
-        console.log("WebSockets not supported!");
     }
 })(this)
