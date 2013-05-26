@@ -29,8 +29,8 @@ type LobbyMessage struct {
 }
 
 func lobby(conn *golem.Connection, data *LobbyMessage) {
-	mylobby.Send([]byte("lobbyMessage { \"msg\": \"" + data.Msg + "\" }"))
-	fmt.Println("\"", data.Msg, "\" sent to members of channel.")
+	mylobby.Emit("lobbyMessage", data)
+	fmt.Println("\"" + data.Msg + "\" sent to members of channel.")
 }
 
 func connClose(conn *golem.Connection) {
