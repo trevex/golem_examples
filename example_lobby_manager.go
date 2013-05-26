@@ -32,6 +32,7 @@ func lobby(conn *golem.Connection, data *LobbyMessage) {
 
 func connClose(conn *golem.Connection) {
 	mylobbymanager.LeaveAll(conn)
+
 }
 
 func main() {
