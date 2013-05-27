@@ -12,22 +12,28 @@ var addr = flag.String("addr", ":8080", "http service address")
 
 var mylobbymanager = golem.NewLobbyManager()
 
-type EmptyMessage struct{}
-
-func join(conn *golem.Connection, data *EmptyMessage) {
-	mylobbymanager.Join("test", conn)
+type LobbyRequest struct {
+	Name string `json:"name"`
 }
 
-func leave(conn *golem.Connection, data *EmptyMessage) {
-	mylobbymanager.Leave("test", conn)
+func join(conn *golem.Connection, data *LobbyRequest) {
+	fmt.Println("Joining", data.Name)
+	mylobbymanager.Join(data.Name, conn)
+}
+
+func leave(conn *golem.Connection, data *LobbyRequest) {
+	fmt.Println("Leaving", data.Name)
+	mylobbymanager.Leave(data.Name, conn)
 }
 
 type LobbyMessage struct {
+	To  string `json:"to"`
 	Msg string `json:"msg"`
 }
 
-func lobby(conn *golem.Connection, data *LobbyMessage) {
-	mylobbymanager.Send("test", []byte(data.Msg))
+func msg(conn *golem.Connection, data *LobbyMessage) {
+	fmt.Println("Sending to", data.To)
+	mylobbymanager.Emit(data.To, "msg", data.Msg)
 }
 
 func connClose(conn *golem.Connection) {
@@ -43,7 +49,7 @@ func main() {
 	// Add the events to the router
 	myrouter.On("join", join)
 	myrouter.On("leave", leave)
-	myrouter.On("lobby", lobby)
+	myrouter.On("msg", msg)
 	myrouter.OnClose(connClose)
 
 	// Serve the public files

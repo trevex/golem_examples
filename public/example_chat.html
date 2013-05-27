@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>Golem Chat</title>
+<script src="js/golem.js"></script>
+<script>
+    var conn = new golem.Connection("127.0.0.1:8080/ws", true);
+</script>
+</head>
+<body>
+<form id="join-form">
+    <input id="join-name" type="text" name="name" value="lobbyname" />
+    <button type="submit">Join</button>
+</form>
+<form id="leave-form">
+    <input id="leave-name" type="text" name="name" value="lobbyname" />
+    <button type="submit">Leave</button>
+</form>
+<form id="chat-form">
+    <input id="chat-to" type="text" name="to" value="tolobbyname" />
+    <input id="chat-msg" type="text" name="msg" value="msg" />
+    <button type="submit">Send</button>
+</form>
+<div id="chat"></div>
+<script>
+    var joinForm = document.getElementById('join-form'),
+        leaveForm = document.getElementById('leave-form'),
+        msgForm = document.getElementById('chat-form'),
+        joinName = document.getElementById('join-name'),
+        leaveName = document.getElementById('leave-name'),
+        chat = document.getElementById('chat'),
+        chatTo = document.getElementById('chat-to'),
+        chatMsg = document.getElementById('chat-msg');
+
+    joinForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+        conn.emit("join", { name: joinName.value });
+        return false;
+    });
+
+    leaveForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+        conn.emit("leave", { name: leaveName.value });
+        return false;
+    });
+
+    msgForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+        conn.emit("msg", { to: chatTo.value, msg: chatMsg.value });
+        return false;
+    });
+
+    conn.on("msg", function(data) {
+        var content = document.createTextNode(data);
+        chat.appendChild(content);
+        chat.appendChild(document.createElement('br'));
+    });
+    
+</script>
+</body>
+</html>
