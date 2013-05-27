@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>Golem Example</title>
+<script src="js/golem.js"></script>
+<script type="text/javascript">
+    var conn = new golem.Connection("127.0.0.1:8080/ws", true);
+
+    conn.on("open", function() {
+        console.log("example: Connected.");
+    });
+
+    conn.on("close", function() {
+        console.log("example: Disconnected.");
+    });
+</script>
+</head>
+<body>
+    <form id="login" action="login" method="post">
+        <button type="submit">Login</button>
+    </form>
+    <form id="logout" action="logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
