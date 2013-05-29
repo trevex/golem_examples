@@ -26,14 +26,14 @@ example_data.go
 -------------------------
 This basic example shows several ways to interact with incoming data.
 
-example_lobby.go
+example_room.go
 -------------------------
-Another basic example illustrating the use of a single lobby instance.
+Another basic example illustrating the use of a single room instance.
 
 example_chat.go
 -------------------------
-Simple example illustrating how to use the lobby manager. After accessing the page the client can
-join chat lobbies, leave them and send messages to lobbies.
+Simple example illustrating how to use the room manager. After accessing the page the client can
+join chat rooms, leave them and send messages to rooms.
 
 example_session.go
 -------------------------

@@ -10,45 +10,45 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
-// Create lobby manager
-var mylobbymanager = golem.NewLobbyManager()
+// Create room manager
+var myroommanager = golem.NewRoomManager()
 
-// Every join and leave request will specify the name of the lobby
+// Every join and leave request will specify the name of the room
 // the connection wants to join or leave.
-type LobbyRequest struct {
+type RoomRequest struct {
 	Name string `json:"name"`
 }
 
-// On join, join the lobby with the specified name.
-func join(conn *golem.Connection, data *LobbyRequest) {
+// On join, join the room with the specified name.
+func join(conn *golem.Connection, data *RoomRequest) {
 	fmt.Println("Joining", data.Name)
-	mylobbymanager.Join(data.Name, conn)
+	myroommanager.Join(data.Name, conn)
 }
 
-// On leave, leave the specified lobby.
-func leave(conn *golem.Connection, data *LobbyRequest) {
+// On leave, leave the specified room.
+func leave(conn *golem.Connection, data *RoomRequest) {
 	fmt.Println("Leaving", data.Name)
-	mylobbymanager.Leave(data.Name, conn)
+	myroommanager.Leave(data.Name, conn)
 }
 
-// Every message has a lobby it broadcast to and the actual message content.
-type LobbyMessage struct {
+// Every message has a room it broadcast to and the actual message content.
+type RoomMessage struct {
 	To  string `json:"to"`
 	Msg string `json:"msg"`
 }
 
-// Emit the msg event to every member of the To-Lobby with the provided message content.
-func msg(conn *golem.Connection, data *LobbyMessage) {
+// Emit the msg event to every member of the To-Room with the provided message content.
+func msg(conn *golem.Connection, data *RoomMessage) {
 	fmt.Println("Sending to", data.To)
-	mylobbymanager.Emit(data.To, "msg", data.Msg)
+	myroommanager.Emit(data.To, "msg", data.Msg)
 }
 
 // Make sure the connection leaves all lobbies.
-// When lobbymanager is used, this is a necessary step! Otherwise the member counting of the manager won't
+// When roommanager is used, this is a necessary step! Otherwise the member counting of the manager won't
 // be accurate anymore. If the connection didn't join or already left all lobbies this will result in a single if
 // check and therefore is not costly.
 func connClose(conn *golem.Connection) {
-	mylobbymanager.LeaveAll(conn)
+	myroommanager.LeaveAll(conn)
 }
 
 func main() {

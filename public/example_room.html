@@ -5,14 +5,14 @@
 <script>
     var conn = new golem.Connection("127.0.0.1:8080/ws", true);
 
-    conn.on("lobbyMessage", function(data) {
+    conn.on("msg", function(data) {
         console.log(data.msg);
     });
     
     conn.on("open", function() {
         console.log("example: Emitting events.");
         conn.emit("join", {});
-        conn.emit("lobby", { msg: "Hi lobby!"});
+        conn.emit("msg", { msg: "Hi lobby!"});
         conn.emit("leave", {});
     });
 
