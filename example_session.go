@@ -16,11 +16,13 @@ const (
 	sessionName = "golem.sid"
 )
 
+// Create session store.
 var store = sessions.NewCookieStore([]byte(secret))
 
+// Handshake callback to validate if request has session and is logged in.
 func validateSession(w http.ResponseWriter, r *http.Request) bool {
-	session, _ := store.Get(r, sessionName)
-	if v, ok := session.Values["isAuthorized"]; ok && v == true {
+	session, _ := store.Get(r, sessionName)                       // Get session.
+	if v, ok := session.Values["isAuthorized"]; ok && v == true { // Check if session is authorized.
 		fmt.Println("Authorized user identified!")
 		return true
 	} else {
@@ -29,21 +31,21 @@ func validateSession(w http.ResponseWriter, r *http.Request) bool {
 	}
 }
 
+// If not available creates session and flags it as authorized.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-
 	session, _ := store.Get(r, sessionName)
 	session.Values["isAuthorized"] = true
 	session.Save(r, w)
-
+	// Redirect back to main page to test websocket connection.
 	http.Redirect(w, r, "/example_session.html", http.StatusFound)
 }
 
+// Flags session as not authorized.
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-
 	session, _ := store.Get(r, sessionName)
 	session.Values["isAuthorized"] = false
 	session.Save(r, w)
-
+	// Redirect back to main page to test websocket connection.
 	http.Redirect(w, r, "/example_session.html", http.StatusFound)
 }
 
@@ -57,7 +59,7 @@ func main() {
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))
 
-	// Handle login
+	// Handle login/logout
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 

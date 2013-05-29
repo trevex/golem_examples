@@ -52,7 +52,10 @@ func main() {
 	flag.Parse()
 
 	// Add the custom parser that returns strings
-	golem.AddParser(customParser)
+	err := golem.AddParser(customParser)
+	if err {
+		fmt.Println(err)
+	}
 
 	// Create a router
 	myrouter := golem.NewRouter()

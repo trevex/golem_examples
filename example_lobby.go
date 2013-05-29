@@ -10,24 +10,30 @@ import (
 
 var addr = flag.String("addr", ":8080", "http service address")
 
+// Create single lobby.
 var mylobby = golem.NewLobby()
 
+// No input is necessary for joining or leaving.
 type EmptyMessage struct{}
 
+// Join mylobby.
 func join(conn *golem.Connection, data *EmptyMessage) {
 	mylobby.Join(conn)
 	fmt.Println("Someone joined mylobby.")
 }
 
+// Leave mylobby.
 func leave(conn *golem.Connection, data *EmptyMessage) {
 	mylobby.Leave(conn)
 	fmt.Println("Someone left mylobby.")
 }
 
+// Simple string will be received as message.
 type LobbyMessage struct {
 	Msg string `json:"msg"`
 }
 
+// Emits the received message to all members of lobby.
 func lobby(conn *golem.Connection, data *LobbyMessage) {
 	mylobby.Emit("lobbyMessage", data)
 	fmt.Println("\"" + data.Msg + "\" sent to members of mylobby.")
