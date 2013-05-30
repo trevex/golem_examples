@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Golem Example</title>
+<script>
+    window.WebSocket = undefined;
+</script>
+<script src="flash-websocket/swfobject.js"></script>
+<script src="flash-websocket/websocket.js"></script>
+<script src="js/golem.js"></script>
+<script>
+    WEB_SOCKET_SWF_LOCATION = "flash-websocket/websocket.swf";
+
+    var conn = new golem.Connection("127.0.0.1:8080/ws", true);
+
+    conn.on("echo", function(data) {
+        console.log("ECHO: "+data);
+    });
+
+    conn.on("open", function() {
+        conn.emit("echo", { msg: "Hello, flash socket!" });
+    });
+</script>
+</head>
+<body>
+</body>
+</html>
