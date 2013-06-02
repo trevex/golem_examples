@@ -34,6 +34,12 @@ func raw(conn *golem.Connection, data []byte) {
 	conn.Emit("raw", []byte("Raw byte array received."))
 }
 
+// Event but no data transmission
+func nodata(conn *golem.Connection) {
+	fmt.Println("Nodata: Event triggered.")
+	conn.Emit("json", ChatMessage{"Hi from nodata!"})
+}
+
 // If a parser is known for the specific data type it is
 // automatically used.
 func custom(conn *golem.Connection, data string) {
@@ -53,7 +59,7 @@ func main() {
 
 	// Add the custom parser that returns strings
 	err := golem.AddParser(customParser)
-	if err {
+	if err != nil {
 		fmt.Println(err)
 	}
 
@@ -63,6 +69,7 @@ func main() {
 	myrouter.On("json", json)
 	myrouter.On("raw", raw)
 	myrouter.On("custom", custom)
+	myrouter.On("nodata", nodata)
 
 	//
 	myrouter.OnClose(func(conn *golem.Connection) {

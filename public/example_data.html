@@ -6,7 +6,7 @@
     var conn = new golem.Connection("127.0.0.1:8080/ws", true);
 
     conn.on("json", function(data) {
-        console.log("JSON: "+data);
+        console.log("JSON: "+data.msg);
     });
     conn.on("raw", function(data) {
         console.log("Raw: "+data);
@@ -21,6 +21,7 @@
         conn.emit("json", { msg: "Hi json!" });
         conn.emit("raw", "Hi raw!");
         conn.emit("custom", "Hi string!");
+        conn.emit("nodata");
     });
 </script>
 </head>
