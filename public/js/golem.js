@@ -22,7 +22,7 @@
         var seperator = " ",
             DefaultJSONProtocol = {
                 unpack: function(data) {
-                    name = data.split(seperator)[0];
+                    var name = data.split(seperator)[0];
                     return [name, data.substring(name.length+1, data.length)];
                 },
                 unmarshal: function(data) {
@@ -62,12 +62,12 @@
                 if (this.callbacks["close"]) this.callbacks["close"](evt);
             },
             onMessage: function(evt) {
-                var data = this.protocol.unpack(evt.data);
+                var [name, data] = this.protocol.unpack(evt.data);
                 if (this.debug) {
                     console.log("golem: Received "+name+"-Event.");
                 }
-                if (this.callbacks[data[0]]) {
-                    var obj = this.protocol.unmarshal(data[1]);
+                if (this.callbacks[name]) {
+                    var obj = this.protocol.unmarshal(data);
                     this.callbacks[name](obj);
                 }
             },
