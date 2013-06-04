@@ -29,13 +29,13 @@ type Answer struct {
 // inbuilt unmarshalling
 func hello(conn *golem.Connection, data *Hello) {
 	fmt.Println("Hello from", data.From, "to", data.To)
-	conn.Emit("answer", Answer{"Thanks, client!"})
+	conn.Emit("answer", &Answer{"Thanks, client!"})
 }
 
 // Event but no data transmission
 func poke(conn *golem.Connection) {
 	fmt.Println("Poke-Event triggered!")
-	conn.Emit("answer", Answer{"Ouch I am sensible!"})
+	conn.Emit("answer", &Answer{"Ouch I am sensible!"})
 }
 
 func main() {

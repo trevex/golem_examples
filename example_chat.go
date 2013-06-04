@@ -40,7 +40,7 @@ type RoomMessage struct {
 // Emit the msg event to every member of the To-Room with the provided message content.
 func msg(conn *golem.Connection, data *RoomMessage) {
 	fmt.Println("Sending to", data.To)
-	myroommanager.Emit(data.To, "msg", data.Msg)
+	myroommanager.Emit(data.To, "msg", &data.Msg)
 }
 
 // Make sure the connection leaves all lobbies.

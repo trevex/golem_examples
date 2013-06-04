@@ -35,7 +35,7 @@ type RoomMessage struct {
 
 // Emits the received message to all members of room.
 func msg(conn *golem.Connection, data *RoomMessage) {
-	myroom.Emit("msg", data)
+	myroom.Emit("msg", &data)
 	fmt.Println("\"" + data.Msg + "\" sent to members of myroom.")
 }
 

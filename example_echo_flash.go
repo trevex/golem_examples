@@ -17,7 +17,7 @@ type EchoMessage struct {
 
 func echo(conn *golem.Connection, data *EchoMessage) {
 	log.Print("Echo message received.")
-	conn.Emit("echo", data.Msg)
+	conn.Emit("echo", &data.Msg)
 }
 
 func loadPolicyFile(filename string) ([]byte, error) {

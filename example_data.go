@@ -23,7 +23,7 @@ type ChatMessage struct {
 // inbuilt unmarshalling
 func json(conn *golem.Connection, data *ChatMessage) {
 	fmt.Println("JSON:  ", data.Msg)
-	conn.Emit("json", data)
+	conn.Emit("json", &data)
 }
 
 // If a function accepts a byte array the data is directly
@@ -37,7 +37,7 @@ func raw(conn *golem.Connection, data []byte) {
 // Event but no data transmission
 func nodata(conn *golem.Connection) {
 	fmt.Println("Nodata: Event triggered.")
-	conn.Emit("json", ChatMessage{"Hi from nodata!"})
+	conn.Emit("json", &ChatMessage{"Hi from nodata!"})
 }
 
 // If a parser is known for the specific data type it is
