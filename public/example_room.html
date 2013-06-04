@@ -11,9 +11,8 @@
     
     conn.on("open", function() {
         console.log("example: Emitting events.");
-        conn.emit("join", {});
+        conn.emit("join");
         conn.emit("msg", { msg: "Hi lobby!"});
-        conn.emit("leave", {});
     });
 
 </script>

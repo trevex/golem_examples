@@ -13,19 +13,10 @@ var addr = flag.String("addr", ":8080", "http service address")
 // Create single room.
 var myroom = golem.NewRoom()
 
-// No input is necessary for joining or leaving.
-type EmptyMessage struct{}
-
 // Join myroom.
-func join(conn *golem.Connection, data *EmptyMessage) {
+func join(conn *golem.Connection) {
 	myroom.Join(conn)
 	fmt.Println("Someone joined myroom.")
-}
-
-// Leave myroom.
-func leave(conn *golem.Connection, data *EmptyMessage) {
-	myroom.Leave(conn)
-	fmt.Println("Someone left myroom.")
 }
 
 // Simple string will be received as message.
@@ -54,7 +45,6 @@ func main() {
 	myrouter := golem.NewRouter()
 	// Add the events to the router
 	myrouter.On("join", join)
-	myrouter.On("leave", leave)
 	myrouter.On("msg", msg)
 	myrouter.OnClose(connClose)
 
