@@ -62,13 +62,13 @@
                 if (this.callbacks["close"]) this.callbacks["close"](evt);
             },
             onMessage: function(evt) {
-                var [name, data] = this.protocol.unpack(evt.data);
+                var data = this.protocol.unpack(evt.data);
                 if (this.debug) {
-                    console.log("golem: Received "+name+"-Event.");
+                    console.log("golem: Received "+data[0]+"-Event.");
                 }
-                if (this.callbacks[name]) {
-                    var obj = this.protocol.unmarshal(data);
-                    this.callbacks[name](obj);
+                if (this.callbacks[data[0]]) {
+                    var obj = this.protocol.unmarshal(data[1]);
+                    this.callbacks[data[0]](obj);
                 }
             },
             onOpen: function(evt) {
