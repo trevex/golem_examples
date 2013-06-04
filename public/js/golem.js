@@ -1,27 +1,40 @@
 /*
 
-	golem - lightweight Go WebSocket-framework
-    Copyright (C) 2013  Niklas Voss
+   Copyright 2013 Niklas Voss
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+      http://www.apache.org/licenses/LICENSE-2.0
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
 
 */
 
 (function(global) {
 
     if (global["WebSocket"]) {
-        var seperator = " ";
+        var seperator = " ",
+            DefaultJSONProtocol = {
+                unpack: function(data) {
+                    name = data.split(seperator)[0];
+                    return [name, data.substring(name.length+1, data.length)];
+                },
+                unmarshal: function(data) {
+                    return JSON.parse(data);
+                },
+                marshal: function(data) {
+                    return JSON.stringify(data);
+                },
+                pack: function(name, data) {
+                    return name + seperator + data;
+                }
+            };
 
         function Connection(addr, debug) {
             
@@ -38,6 +51,10 @@
 
         Connection.prototype = {
             constructor: Connection,
+            protocol: DefaultJSONProtocol,
+            setProtocol: function(protocol) {
+                this.protocol = protocol;
+            },
             onClose: function(evt) {
                 if (this.debug) {
                     console.log("golem: Connection closed!");
@@ -45,14 +62,12 @@
                 if (this.callbacks["close"]) this.callbacks["close"](evt);
             },
             onMessage: function(evt) {
-                var data = evt.data,
-                    name = data.split(seperator, 1)[0];
+                var data = this.protocol.unpack(evt.data);
                 if (this.debug) {
                     console.log("golem: Received "+name+"-Event.");
                 }
-                if (this.callbacks[name]) {
-                    var json = data.substring(name.length+1, data.length),
-                        obj  = JSON.parse(json);
+                if (this.callbacks[data[0]]) {
+                    var obj = this.protocol.unmarshal(data[1]);
                     this.callbacks[name](obj);
                 }
             },
@@ -66,7 +81,7 @@
                 this.callbacks[name] = callback;
             },
             emit: function(name, data) {
-                this.ws.send(name+" "+JSON.stringify(data));
+                this.ws.send(this.protocol.pack(name, this.protocol.marshal(data)));
             }
 
         }
