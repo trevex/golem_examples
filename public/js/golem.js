@@ -28,11 +28,8 @@
                 unmarshal: function(data) {
                     return JSON.parse(data);
                 },
-                marshal: function(data) {
-                    return JSON.stringify(data);
-                },
-                pack: function(name, data) {
-                    return name + seperator + data;
+                marshalAndPack: function(name, data) {
+                    return name + seperator + JSON.stringify(data);
                 }
             };
 
@@ -54,6 +51,9 @@
             protocol: DefaultJSONProtocol,
             setProtocol: function(protocol) {
                 this.protocol = protocol;
+            },
+            enableBinary: function() {
+                this.ws.binaryType = 'arraybuffer';
             },
             onClose: function(evt) {
                 if (this.debug) {
@@ -81,7 +81,7 @@
                 this.callbacks[name] = callback;
             },
             emit: function(name, data) {
-                this.ws.send(this.protocol.pack(name, this.protocol.marshal(data)));
+                this.ws.send(this.protocol.marshalAndPack(name, data));
             }
 
         }
