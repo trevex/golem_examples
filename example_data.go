@@ -29,8 +29,8 @@ func json(conn *golem.Connection, data *ChatMessage) {
 // If a function accepts a byte array the data is directly
 // forwarded to the function without any parsing involved.
 // Hence it is the fastest way.
-func raw(conn *golem.Connection, data []byte) {
-	fmt.Println("Raw:   ", string(data))
+func raw(conn *golem.Connection, data interface{}) {
+	fmt.Println("Raw:   ", string(data.([]byte)))
 	conn.Emit("raw", []byte("Raw byte array received."))
 }
 
