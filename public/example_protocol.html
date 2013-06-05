@@ -6,6 +6,12 @@
 <script type="text/javascript">
     var conn = new golem.Connection("127.0.0.1:8080/ws", true);
 
+    // Protocol implementation need the same methods as on the server side.
+    // The main difference is the first letter being lower-case because of JavaScripts idiomatics.
+    // unpack (data: bytearray) returns (name string, data object)
+    // unmarshal (data: object) returns (data: object) - unmarshals the received data into a proper 
+    // object in this example all unmarshaling is done in unpack, so simply return the data.
+    // marshalAndPack (name: string, data: object) returns (data) - marshals and packs data for sending.
     var BSON = bson().BSON,
     	BSONProtocol = {
         	unpack: function(data) {
@@ -13,14 +19,16 @@
             	return [doc.e, doc.d];
         	},
         	unmarshal: function(data) {
-        		return data;
+        		return data; // just return data (it is automatically unmarshalled during unpack step)
         	},
         	marshalAndPack: function(name, data) {
-        		return BSON.serialize({ e: name, d: data }, false, true, false);
+        		return BSON.serialize({ e: name, d: data }, false, true, false).buffer;
         	}
     };
 
+    // Too use BSON efficiently binaryType arraybuffer should be used.
     conn.enableBinary();
+    // Activate new protocol.
     conn.setProtocol(BSONProtocol);
 
     conn.on("answer", function(data) {
