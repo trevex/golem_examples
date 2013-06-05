@@ -42,11 +42,7 @@ func (_ *BSONProtocol) Unpack(data []byte) (string, []byte, error) {
 
 // Unmarshal the leftover data into the desired type of the callback.
 func (_ *BSONProtocol) Unmarshal(data []byte, structPtr interface{}) error {
-	raw := bson.Raw{
-		Kind: 3, // Embedded document
-		Data: data,
-	}
-	return raw.Unmarshal(structPtr)
+	return bson.Unmarshal(data, structPtr)
 }
 
 // Marshal and pack data into array of bytes for sending.
