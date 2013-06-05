@@ -31,18 +31,18 @@ type OutgoingBSONMessage struct {
 }
 
 // Partially unmarshal incoming data to unpack event name.
-func (_ *BSONProtocol) Unpack(data []byte) (string, []byte, error) {
+func (_ *BSONProtocol) Unpack(data []byte) (string, interface{}, error) {
 	rawMsg := &RawIncomingBSONMessage{}
 	err := bson.Unmarshal(data, rawMsg)
 	if err != nil {
 		return "", nil, err
 	}
-	return rawMsg.Event, rawMsg.Data.Data, nil
+	return rawMsg.Event, &rawMsg.Data, nil
 }
 
 // Unmarshal the leftover data into the desired type of the callback.
-func (_ *BSONProtocol) Unmarshal(data []byte, structPtr interface{}) error {
-	return bson.Unmarshal(data, structPtr)
+func (_ *BSONProtocol) Unmarshal(data interface{}, typePtr interface{}) error {
+	return data.(*bson.Raw).Unmarshal(typePtr)
 }
 
 // Marshal and pack data into array of bytes for sending.
