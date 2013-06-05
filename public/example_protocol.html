@@ -9,8 +9,7 @@
     var BSON = bson().BSON,
     	BSONProtocol = {
         	unpack: function(data) {
-        		console.log(data);
-            	var doc = BSON.deserialize(data)
+            	var doc = BSON.deserialize(new Uint8Array(data));
             	return [doc.e, doc.d];
         	},
         	unmarshal: function(data) {
