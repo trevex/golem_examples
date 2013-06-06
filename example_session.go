@@ -42,9 +42,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // Flags session as not authorized.
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, sessionName)
-	session.Values["isAuthorized"] = false
-	session.Save(r, w)
+	session, err := store.Get(r, sessionName)
+	if err == nil {
+		delete(session.Values, "isAuthorized")
+		session.Save(r, w)
+	}
 	// Redirect back to main page to test websocket connection.
 	http.Redirect(w, r, "/example_session.html", http.StatusFound)
 }
