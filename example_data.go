@@ -50,21 +50,20 @@ func custom(conn *golem.Connection, data string) {
 // Custom parsers take a byte array as argument and return
 // the data type they parse to and a boolean (to validate if
 // parsing was successful).
-func customParser(data []byte) (string, bool) {
-	return string(data), true
+func stringExtension(data interface{}) (string, bool) {
+	return string(data.([]byte)), true
 }
 
 func main() {
 	flag.Parse()
 
+	// Create a router
+	myrouter := golem.NewRouter()
 	// Add the custom parser that returns strings
-	err := golem.AddParser(customParser)
+	err := myrouter.ExtendProtocol(stringExtension)
 	if err != nil {
 		fmt.Println(err)
 	}
-
-	// Create a router
-	myrouter := golem.NewRouter()
 	// Add the events to the router
 	myrouter.On("json", json)
 	myrouter.On("raw", raw)
