@@ -12,7 +12,9 @@ And access the example through your browser of choice, that supports WebSocket:
 ```
 http://127.0.0.1:8080/example_name.html
 ```
-To run the session example gorilla/sessions needs to be available in your GOPATH, so go get it first.
+To run the session example gorilla/sessions needs to be available in your GOPATH, so `go get` it first.
+
+To run the custom protocol example v2/mgo/bson needs to be available in your GOPATH, so `go get` it first.
 
 Note
 --------------------------
