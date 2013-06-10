@@ -21,13 +21,14 @@ var store = sessions.NewCookieStore([]byte(secret))
 
 // Handshake callback to validate if request has session and is logged in.
 func validateSession(w http.ResponseWriter, r *http.Request) bool {
-	session, _ := store.Get(r, sessionName)                       // Get session.
-	if v, ok := session.Values["isAuthorized"]; ok && v == true { // Check if session is authorized.
-		fmt.Println("Authorized user identified!")
-		return true
-	} else {
-		fmt.Println("Unauthorized user detected!")
-		return false
+	if session, err := store.Get(r, sessionName); err == nil { // Get session.
+		if v, ok := session.Values["isAuthorized"]; ok && v == true { // Check if session is authorized.
+			fmt.Println("Authorized user identified!")
+			return true
+		} else {
+			fmt.Println("Unauthorized user detected!")
+			return false
+		}
 	}
 }
 
@@ -42,8 +43,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // Flags session as not authorized.
 func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, sessionName)
-	if err == nil {
+	if session, err := store.Get(r, sessionName); err == nil {
 		delete(session.Values, "isAuthorized")
 		session.Save(r, w)
 	}
