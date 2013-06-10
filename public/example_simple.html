@@ -3,7 +3,7 @@
 <title>Golem Example</title>
 <script src="js/golem.js"></script>
 <script type="text/javascript">
-    var conn = new golem.Connection("127.0.0.1:8080/ws", true);
+    var conn = new golem.Connection("ws://127.0.0.1:8080/ws", true);
 
     conn.on("answer", function(data) {
         console.log("Answer: "+data.msg);

@@ -4,7 +4,7 @@
 <script src="js/golem.js"></script>
 <script src="https://rawgithub.com/mongodb/js-bson/master/browser_build/bson.js"></script>
 <script type="text/javascript">
-    var conn = new golem.Connection("127.0.0.1:8080/ws", true);
+    var conn = new golem.Connection("ws://127.0.0.1:8080/ws", true);
 
     // Protocol implementation need the same methods as on the server side.
     // The main difference is the first letter being lower-case because of JavaScripts idiomatics.

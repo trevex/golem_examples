@@ -35,7 +35,7 @@
 
         function Connection(addr, debug) {
             
-            this.ws = new WebSocket("ws://"+addr);
+            this.ws = new WebSocket(addr);
             
             this.callbacks = {};
             
