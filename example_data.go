@@ -60,7 +60,7 @@ func main() {
 	// Create a router
 	myrouter := golem.NewRouter()
 	// Add the custom parser that returns strings
-	err := myrouter.ExtendProtocol(stringExtension)
+	err := myrouter.AddProtocolExtension(stringExtension)
 	if err != nil {
 		fmt.Println(err)
 	}
