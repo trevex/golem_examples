@@ -36,6 +36,7 @@ func connClose(conn *golem.Connection) {
 	// can be left out, because when sending to lobbies
 	// unavailable connection are automatically sorted out.
 	myroom.Leave(conn)
+	fmt.Println("Someone left myroom.")
 }
 
 func main() {
