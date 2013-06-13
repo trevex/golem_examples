@@ -29,6 +29,7 @@ Most of the provided examples are part of a tutorial from golem's wiki:
 * [Handshake authorisation using Sessions](https://github.com/trevex/golem/wiki/Handshake-authorisation-using-Sessions)
 * [Using flash as WebSocket fallback](https://github.com/trevex/golem/wiki/Using-flash-as-WebSocket-fallback)
 * [Custom protocol using BSON](https://github.com/trevex/golem/wiki/Custom-protocol-using-BSON)
+* [Using an extended connection type](https://github.com/trevex/golem/wiki/Using-an-extended-connection-type)
 
 
 
@@ -65,3 +66,7 @@ example_protocol.go
 -------------------------
 The protocol example presents how to implement custom protocols. In this case a custom BSON-based protocol is used to communicate between
 client and server.
+
+example_connection_extension.go
+-------------------------
+Based on the simple example, but enhancing it to use a connection extension. Demonstrating additional methods and members of an extended connection.
