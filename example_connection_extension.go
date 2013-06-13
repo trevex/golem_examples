@@ -25,15 +25,17 @@ type Answer struct {
 	Msg string `json:"msg"`
 }
 
+// Extended connection type embedding the simple connection to provide the same functionality.
 type ExtendedConnection struct {
 	*golem.Connection
 	Counter int
 }
 
+// Constructor of the extended connection
 func NewExtendedConnection(conn *golem.Connection) *ExtendedConnection {
 	return &ExtendedConnection{
 		Connection: conn,
-		Counter:    1,
+		Counter:    1, // to illustrate the persistence of the extension
 	}
 }
 
@@ -57,7 +59,7 @@ func main() {
 
 	// Create a router
 	myrouter := golem.NewRouter()
-	//
+	// Enable the extension
 	myrouter.SetConnectionExtension(NewExtendedConnection)
 	// Add the events to the router
 	myrouter.On("hello", hello)
