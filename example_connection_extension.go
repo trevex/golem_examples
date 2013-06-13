@@ -31,6 +31,11 @@ type ExtendedConnection struct {
 	Counter int
 }
 
+// An additional method for the extended type
+func (e *ExtendedConnection) answer(msg string) {
+	e.Emit("answer", &Answer{msg})
+}
+
 // Constructor of the extended connection
 func NewExtendedConnection(conn *golem.Connection) *ExtendedConnection {
 	return &ExtendedConnection{
@@ -44,14 +49,14 @@ func NewExtendedConnection(conn *golem.Connection) *ExtendedConnection {
 func hello(conn *ExtendedConnection, data *Hello) {
 	conn.Counter += 1
 	fmt.Println("Hello from", data.From, "to", data.To, "Counter:", conn.Counter)
-	conn.Emit("answer", &Answer{"Thanks, client!"})
+	conn.answer("Thanks, client!")
 }
 
 // Event but no data transmission
 func poke(conn *ExtendedConnection) {
 	conn.Counter += 1
 	fmt.Println("Poke-Event triggered! Counter:", conn.Counter)
-	conn.Emit("answer", &Answer{"Ouch I am sensible!"})
+	conn.answer("Ouch I am sensible!")
 }
 
 func main() {
