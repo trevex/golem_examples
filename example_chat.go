@@ -51,6 +51,16 @@ func connClose(conn *golem.Connection) {
 	myroommanager.LeaveAll(conn)
 }
 
+// If a room is created or removed because of insufficient users
+// print the name!
+// ( The functions need to be of the type func(string) and receive the rooms name as argument )
+func roomCreated(name string) {
+	fmt.Println("Room created:", name)
+}
+func roomRemoved(name string) {
+	fmt.Println("Room removed:", name)
+}
+
 func main() {
 	flag.Parse()
 
@@ -61,6 +71,10 @@ func main() {
 	myrouter.On("leave", leave)
 	myrouter.On("msg", msg)
 	myrouter.OnClose(connClose)
+
+	// React on room manager events
+	myroommanager.On("create", roomCreated)
+	myroommanager.On("remove", roomRemoved)
 
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))
