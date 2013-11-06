@@ -70,10 +70,10 @@ func main() {
 	myrouter.On("hello", hello)
 	myrouter.On("poke", poke)
 
-    // Close callback
-    myrouter.OnClose(func(conn *ExtendedConnection) {
-        fmt.Println("Connection closed with counter at:", conn.Counter)
-    })
+	// Close callback
+	myrouter.OnClose(func(conn *ExtendedConnection) {
+		fmt.Println("Connection closed with counter at:", conn.Counter)
+	})
 
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))
