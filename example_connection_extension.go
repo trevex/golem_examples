@@ -74,6 +74,10 @@ func main() {
 	myrouter.OnClose(func(conn *ExtendedConnection) {
 		fmt.Println("Connection closed with counter at:", conn.Counter)
 	})
+    // Connect callback
+    myrouter.OnConnect(func(conn *ExtendedConnection) {
+        fmt.Println("User connected counter at:", conn.Counter)
+    })
 
 	// Serve the public files
 	http.Handle("/", http.FileServer(http.Dir("./public")))
