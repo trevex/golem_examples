@@ -25,11 +25,10 @@ func validateSession(w http.ResponseWriter, r *http.Request) bool {
 		if v, ok := session.Values["isAuthorized"]; ok && v == true { // Check if session is authorized.
 			fmt.Println("Authorized user identified!")
 			return true
-		} else {
-			fmt.Println("Unauthorized user detected!")
-			return false
 		}
 	}
+    fmt.Println("Unauthorized user detected!")
+    return false;
 }
 
 // If not available creates session and flags it as authorized.
